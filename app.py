@@ -6,15 +6,17 @@ from langchain.agents import create_csv_agent
 api_key = os.environ.get("OPENAI_API_KEY")
 
 if api_key:
-    # API key is set as an environment variable
-    df = pd.read_csv('data/knowledge-base.csv')
-    print(df[0:10])
-
-    csv_path = 'data/knowledge-base.csv'
-
-    csv_agent = create_csv_agent(OpenAI(api_key=api_key, temperature=0), csv_path, verbose=True)
-    output = csv_agent.run("Look for similar questions in the intent column and find the answer from the response column. Here is the question: What is LSPU?")
-    print(output)
+    print("OpenAI API key is good.")
 else:
     # API key is not set
     print("OpenAI API key is not provided as an environment variable.")
+
+# API key is set as an environment variable
+df = pd.read_csv('data/knowledge-base.csv')
+print(df[0:10])
+
+csv_path = 'data/knowledge-base.csv'
+
+csv_agent = create_csv_agent(OpenAI(model_kwargs={"api_key": api_key, "temperature": 0}), csv_path, verbose=True)
+output = csv_agent.run("Look for similar questions in the intent column and find the answer from the response column. Here is the question: What is LSPU?")
+print(output)
